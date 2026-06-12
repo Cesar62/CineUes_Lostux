@@ -1,0 +1,15 @@
+/home/cesaremanuelgonzalez946/CineUES/CineUES/bin/Debug/net8.0/CineUES
+/home/cesaremanuelgonzalez946/CineUES/CineUES/bin/Debug/net8.0/CineUES.deps.json
+/home/cesaremanuelgonzalez946/CineUES/CineUES/bin/Debug/net8.0/CineUES.runtimeconfig.json
+/home/cesaremanuelgonzalez946/CineUES/CineUES/bin/Debug/net8.0/CineUES.dll
+/home/cesaremanuelgonzalez946/CineUES/CineUES/bin/Debug/net8.0/CineUES.pdb
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.GeneratedMSBuildEditorConfig.editorconfig
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.AssemblyInfoInputs.cache
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.AssemblyInfo.cs
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.csproj.CoreCompileInputs.cache
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.sourcelink.json
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.dll
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/refint/CineUES.dll
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.pdb
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/CineUES.genruntimeconfig.cache
+/home/cesaremanuelgonzalez946/CineUES/CineUES/obj/Debug/net8.0/ref/CineUES.dll
