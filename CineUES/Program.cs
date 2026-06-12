@@ -32,11 +32,16 @@
                     case 1:
                         Console.WriteLine("----------------------");
                         Console.WriteLine("Sala CineUES");
-                    break;
+                        Console.WriteLine("----------------------");
+                        MostrarMapa(Asientos);
+                        Console.WriteLine("----------------------");
+                        Console.WriteLine("Presione una tecla para continuar");
+                        Console.ReadKey();
+                        break;
 
                     case 6:
-                     Menu = false;                    
-                    break;
+                        Menu = false;
+                        break;
 
                     default: //Esto por si ingresa un valor que no esta en el menu
                         Console.WriteLine("----------------------");
@@ -55,5 +60,19 @@
                 Console.ReadKey();
             }
         } while (Menu);
+    }
+
+    static void MostrarMapa(char[,] Mapa) //Funcion que mostrara los asientos
+    {
+        for (int fila = 0; fila < Mapa.GetLength(0); fila++) //Creamos el primer bucle que ira mostrando las filas
+        {
+            for (int columna = 0; columna < Mapa.GetLength(1); columna++) //Este bucle ira imprimiendo los valores tomando la fila y la columna
+            {
+                Console.Write(Mapa[fila, columna] + " ");
+            }
+            
+            //Cuando termine de recorrer las columnas pone un espacio para separar y repite hasta que se termine las filas
+            Console.WriteLine("");
+        }
     }
 }
