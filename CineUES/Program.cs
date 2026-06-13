@@ -23,7 +23,7 @@
             Console.WriteLine("!Bienvenido a CineUES¡");
             Console.WriteLine("----------------------");
             Console.WriteLine("¿Que desea hacer?");
-            Console.WriteLine("1.Mostrar Mapa de la sala. 2.Reservar asiento. 3.Comprar e imprimir ticket. 4.Cancelar reserva. 5.Mostrar estadísticas de la función. 6.Salir.");
+            Console.WriteLine("1.Mostrar Sala de la sala. 2.Reservar asiento. 3.Comprar e imprimir ticket. 4.Cancelar reserva. 5.Mostrar estadísticas de la función. 6.Salir.");
             if (int.TryParse(Console.ReadLine(), out Quehacer)) //Con tryparse nos aeguramos que unicamnete ingrese numeros enteros
             {
 
@@ -40,8 +40,7 @@
                         break;
 
                     case 2: //Aqui ira la funcion de reservar asiento
-
-                        break;
+                    break;
                     
                     case 3: //Aqui ira la fucion de comprar e imprimir el tickect
                     break;
@@ -75,13 +74,13 @@
         } while (Menu);
     }
 
-    static void MostrarMapa(char[,] Mapa) //Funcion que mostrara los asientos
+    static void MostrarMapa(char[,] Sala) //Funcion que mostrara los asientos
     {
-        for (int fila = 0; fila < Mapa.GetLength(0); fila++) //Creamos el primer bucle que ira mostrando las filas
+        for (int fila = 0; fila < Sala.GetLength(0); fila++) //Creamos el primer bucle que ira mostrando las filas
         {
-            for (int columna = 0; columna < Mapa.GetLength(1); columna++) //Este bucle ira imprimiendo los valores tomando la fila y la columna
+            for (int columna = 0; columna < Sala.GetLength(1); columna++) //Este bucle ira imprimiendo los valores tomando la fila y la columna
             {
-                Console.Write(Mapa[fila, columna] + " ");
+                Console.Write(Sala[fila, columna] + " ");
             }
 
             //Cuando termine de recorrer las columnas pone un espacio para separar y repite hasta que se termine las filas
