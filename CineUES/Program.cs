@@ -29,7 +29,7 @@
 
                 switch (Quehacer) //Realizamos acciones segun que se ha escogido
                 {
-                    case 1:
+                    case 1: //Muestra los asientos del cine
                         Console.WriteLine("----------------------");
                         Console.WriteLine("Sala CineUES");
                         Console.WriteLine("----------------------");
@@ -38,6 +38,19 @@
                         Console.WriteLine("Presione una tecla para continuar");
                         Console.ReadKey();
                         break;
+
+                    case 2: //Aqui ira la funcion de reservar asiento
+
+                        break;
+                    
+                    case 3: //Aqui ira la fucion de comprar e imprimir el tickect
+                    break;
+
+                    case 4: //Aqui ira la funcion de cancelar la reserva
+                    break;
+
+                    case 5: // Aqui se mostraran las estadisiticas de la la funcion
+                    break;
 
                     case 6:
                         Menu = false;
@@ -70,7 +83,7 @@
             {
                 Console.Write(Mapa[fila, columna] + " ");
             }
-            
+
             //Cuando termine de recorrer las columnas pone un espacio para separar y repite hasta que se termine las filas
             Console.WriteLine("");
         }
