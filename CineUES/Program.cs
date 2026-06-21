@@ -5,7 +5,7 @@ class CineUES
     static void Main(string[] args)
     {
         //Declaracion de la matriz inicial
-        char[,] Asientos = //Para los char se utiliza 'comillas simples' no se puede con "comillas dobles"
+        char[,] sala = //Para los char se utiliza 'comillas simples' no se puede con "comillas dobles"
         {
             {'-','1', '2', '3', '4', '5', '6', '7', '8'}, //Añado una fila y una columna mas para las marcas de filas con letras y las columnas con numeros
             {'A','L', 'L', 'L', 'L', 'L', 'L', 'L', 'L'},
@@ -35,7 +35,7 @@ class CineUES
                         Console.WriteLine("----------------------");
                         Console.WriteLine("Sala CineUES");
                         Console.WriteLine("----------------------");
-                        MostrarMapa(Asientos);
+                        MostrarMapa(sala);
                         Console.WriteLine("----------------------");
                         Console.WriteLine("Presione una tecla para continuar");
                         Console.ReadKey();
