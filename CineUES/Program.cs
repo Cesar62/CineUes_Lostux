@@ -19,6 +19,8 @@ class CineUES
         //Variables
         bool Menu = true; //variable para el bucle de menu
         int Quehacer;  //Variable que guardara la opcion a elegir por el usuario
+        double acumulador = 0.00;
+        int contador = 0;
         do
         {
             Console.WriteLine("----------------------");
@@ -45,7 +47,7 @@ class CineUES
                         break;
 
                     case 3: //Aqui ira la fucion de comprar e imprimir el tickect
-                            
+                            ComprarTicket(ref sala, ref acumulador, ref contador); //Se llama la funcion comprar ticket y las variables que se le referencian
                         break;
 
                     case 4: //Aqui ira la funcion de cancelar la reserva
