@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
 
 class CineUES
 {
@@ -28,7 +29,7 @@ class CineUES
             Console.WriteLine("----------------------");
             Console.WriteLine("¿Que desea hacer?");
             Console.WriteLine("1.Mostrar Sala de la sala.");
-            Console.WriteLine("2. Rservar asiento");
+            Console.WriteLine("2. Reservar asiento");
             Console.WriteLine("3. Comprara e imprimir ticket");
             Console.WriteLine("4. Cancelar reserva");
             Console.WriteLine("5. Mostrar estadisticas de la función");
@@ -62,6 +63,10 @@ class CineUES
                         break;
 
                     case 4: //Aqui ira la funcion de cancelar la reserva
+                        MostrarMapa(sala);
+                        cancelarReserva(ref sala);
+                        Console.WriteLine("Presione enter para continuar");
+                        Console.ReadKey();
                         break;
 
                     case 5: // Aqui se mostraran las estadisiticas de la la funcion
@@ -176,8 +181,77 @@ class CineUES
 
             //pero si el asiento esta libre va a cambiar el estado
             sala[fila, columna] = 'R';
-            Console.WriteLine($"Asiento {filaIngresada}{columnaIngresada} fueron reservados correctamente");
+            Console.WriteLine($"Asiento {filaIngresada} {columnaIngresada} fueron reservados correctamente");
         }
+    }
+
+    //esta es la funcio para quitar la reserva del asiento
+    //recibe la matriz por referencia para porder modificarla
+    static void cancelarReserva(ref char[,] sala)
+    {
+        Console.WriteLine("Cancelar la reserva");
+
+        //para poder controlar si los datos que ingreso son validos
+        bool datosValidos = true;
+
+        Console.WriteLine("Ingrese la fila del asiento reservado (A-F): ");
+
+        //ahora aqui convierte la letra ingresada a mayuscula 
+        char filaIngresada = char.ToUpper(Console.ReadKey().KeyChar);
+        Console.WriteLine();
+
+        //ahora toca verificar que la fila este entre A y F
+        if (filaIngresada < 'A' || filaIngresada > 'F' )
+        {
+            Console.WriteLine("Esa fila no es valida");
+            datosValidos = false;
+        }
+
+        //esta es la variable que guarda la columna
+        int columnaIngresada = 0;
+
+        //solo solicita la columna si fue valida 
+        if (datosValidos)
+        {
+            Console.WriteLine("Ingres la columna del asiento por favor (1-8): ");
+
+            //valida que el numero sea entero
+            if (!int.TryParse(Console.ReadLine(), out columnaIngresada))
+            {
+                Console.WriteLine("La columna deber ser un numero!!");
+                datosValidos = false;
+            }
+
+            //verificar que este dentro del rango
+            else if (columnaIngresada < 1 || columnaIngresada > 8)
+            {
+                Console.WriteLine("Esa columna no es valida");
+                datosValidos = false;
+            }
+        }
+
+        //en el caso que haiga un error va terminar el metodo
+        if (!datosValidos)
+        {
+            return;
+        }
+
+        //conversion de la letra a indice de la fila
+        int fila = filaIngresada - 'A' + 1;
+
+        //la columna coincide con el indice de la matriz
+        int columna = columnaIngresada;
+
+        //verificar que el asiento este reservado
+        if (sala[fila, columna] != 'R')
+        {
+            Console.WriteLine("Este asiento no esta reservado");
+            return;
+        }
+
+        //cancelar la reserva "R" y volver a ponerla libre "L"
+        sala[fila,columna] = 'L';
+        Console.WriteLine($"La reserva del asiento {filaIngresada} {columnaIngresada} fueron cancelados"); 
     }
     //constantes
     const double PRECIO_BASE = 5.00;
