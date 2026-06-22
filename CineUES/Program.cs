@@ -4,7 +4,7 @@ class CineUES
 {
     static void Main(string[] args)
     {
-        //Declaracion de la matriz inicial
+        //Declaracion de la matriz inicial hola
         char[,] sala = //Para los char se utiliza 'comillas simples' no se puede con "comillas dobles"
         {
             {'-','1', '2', '3', '4', '5', '6', '7', '8'}, //Añado una fila y una columna mas para las marcas de filas con letras y las columnas con numeros
