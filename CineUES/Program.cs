@@ -27,7 +27,14 @@ class CineUES
             Console.WriteLine("!Bienvenido a CineUES¡");
             Console.WriteLine("----------------------");
             Console.WriteLine("¿Que desea hacer?");
-            Console.WriteLine("1.Mostrar Sala de la sala. 2.Reservar asiento. 3.Comprar e imprimir ticket. 4.Cancelar reserva. 5.Mostrar estadísticas de la función. 6.Salir.");
+            Console.WriteLine("1.Mostrar Sala de la sala.");
+            Console.WriteLine("2. Rservar asiento");
+            Console.WriteLine("3. Comprara e imprimir ticket");
+            Console.WriteLine("4. Cancelar reserva");
+            Console.WriteLine("5. Mostrar estadisticas de la función");
+            Console.WriteLine("6. Salir");
+
+
             if (int.TryParse(Console.ReadLine(), out Quehacer)) //Con tryparse nos aeguramos que unicamnete ingrese numeros enteros
             {
 
@@ -44,10 +51,14 @@ class CineUES
                         break;
 
                     case 2: //Aqui ira la funcion de reservar asiento
+                        MostrarMapa(sala);
+                        reservarAsiento(ref sala);
+                        Console.WriteLine("Presione enter para continuar");
+                        Console.ReadKey();
                         break;
 
                     case 3: //Aqui ira la fucion de comprar e imprimir el tickect
-                            ComprarTicket(ref sala, ref acumulador, ref contador); //Se llama la funcion comprar ticket y las variables que se le referencian
+                        ComprarTicket(ref sala, ref acumulador, ref contador); //Se llama la funcion comprar ticket y las variables que se le referencian
                         break;
 
                     case 4: //Aqui ira la funcion de cancelar la reserva
@@ -93,6 +104,81 @@ class CineUES
         }
     }
 
+    //la funcion para reservar el asiento
+    //recibe la matriz por referencia (ref) para poder modificarla directamente
+    static void reservarAsiento(ref char[,] sala)
+    {
+        Console.WriteLine("Reservar Asiento");
+
+        // bandera que servirá para controlar si los datos ingresados son válidos
+        // si paso algun error lo va a cambiar a false
+        bool datosValidos = true;
+
+        //solicita la fila
+        Console.Write("Ingrese la fila por favor (A-F)");
+        //lee un caracter para convertirlo en mayuscula, no importa si escribe a o A
+        char filaIngresada = char.ToUpper(Console.ReadKey().KeyChar); //Readkey espera que el usuario presione una tecla y keychar toma el resultado
+        Console.WriteLine();
+
+        //validariamos la fila pero solo se puede con letras de la A a la F
+        if (filaIngresada < 'A' || filaIngresada > 'F')
+        {
+            Console.WriteLine("Esa fila no es valida");
+
+            //la bandera pasa a falso porque hubo un error
+            datosValidos = false;
+        }
+
+        int columnaIngresada = 0;//en esta variable guardo la columna que selecciono
+
+        //aqui se solicita la columna solamente si la fila fue válida        
+        {
+            Console.Write("Ingrese la columna porfavor (1-8)");
+
+            //esta para convertir lo de entrada a entero
+            if (!int.TryParse(Console.ReadLine(), out columnaIngresada))
+            {
+                Console.WriteLine("La columna debe ser un numero");
+
+                //si no es un numero la bandera va pasar a false
+                datosValidos = false;
+            }
+
+            // este es para verificar que el numero este entre 1 y 8
+            else if (columnaIngresada < 1 || columnaIngresada > 8)
+            {
+                Console.WriteLine("Esa columna no es valida");
+
+                //si esta fuera del rango es invalido
+                datosValidos = false;
+            }
+            // si algun dato no era correcto se termina y regresa al menu principal
+            if (!datosValidos)
+            {
+                return;
+            }
+
+            //se le sumara 1 porque la fila 0 es la que tiene los encabezados
+            int fila = filaIngresada - 'A' + 1;
+
+            // la columna coincide directamente con los índices de la matriz,
+            // porque la columna 0 contiene las letras de las filas.
+            int columna = columnaIngresada;
+
+            //verificar si el asiento esta libre osea los que esten en L
+            if (sala[fila, columna] != 'L')
+            {
+                Console.WriteLine("Este asiento ya esta ocupado");
+
+                //terminaria el metodo sin modificar la matriz
+                return;
+            }
+
+            //pero si el asiento esta libre va a cambiar el estado
+            sala[fila, columna] = 'R';
+            Console.WriteLine($"Asiento {filaIngresada}{columnaIngresada} fueron reservados correctamente");
+        }
+    }
     //constantes
     const double PRECIO_BASE = 5.00;
     const double IVA = 0.13;
