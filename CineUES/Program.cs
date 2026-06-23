@@ -282,91 +282,162 @@ class CineUES
     }
 
     //constantes Para compra e imprimir ticket
-    const double PRECIO_BASE = 5.00;
+    const double PRECIO_BASE = 4.00;
     const double IVA = 0.13;
-    const double RECARGO_VIP = 2.50;
-    const double DESCUENTO_ESTUDIANTE = 0.10;
+    const double RECARGO_VIP = 2.00;
+    const double DESCUENTO_NINO = 0.50;
+    const double DESCUENTO_TERCERA = 0.30;
+    const double DESCUENTO_MIERCOLES = 0.20;
+
+    // Método: ComprarTicket
+    // Solicita asiento, categoría y día al usuario,
+    // calcula el precio, marca el asiento como vendido,
+    // actualiza acumulador y contador, e imprime el ticket.
 
     static void ComprarTicket(ref char[,] sala, ref double acumulador, ref int contador)
     {
+
+        // Mostrar el mapa antes de pedir el asiento
+        MostrarMapa(sala);
+
+        // Solicitar y validar la FILA 
         Console.Write("Ingrese fila (A-F): ");
         char filaChar = char.ToUpper(Console.ReadKey().KeyChar);
         Console.WriteLine();
 
+        // Verificar que la fila esté en el rango A-F
+        if (filaChar < 'A' || filaChar > 'F')
+        {
+            Console.WriteLine("Fila inválida. Solo se aceptan filas A-F.");
+            Console.WriteLine("Presione una tecla para continuar...");
+            Console.ReadKey();
+            return;
+        }
+
+        // Solicitar y validar la COLUMNA 
         Console.Write("Ingrese columna (1-8): ");
         if (!int.TryParse(Console.ReadLine(), out int columna) || columna < 1 || columna > 8)
         {
-            Console.WriteLine("Columna inválida.");
+            Console.WriteLine("Columna inválida. Solo se aceptan columnas del 1 al 8.");
+            Console.WriteLine("Presione una tecla para continuar...");
+            Console.ReadKey();
             return;
         }
 
-        int filaIdx = filaChar - 'A';
+        // Calcular índices reales en la matriz
+        // +1 en fila porque la fila 0 tiene los encabezados numéricos
+        // columna se usa directo porque la columna 0 tiene las letras de fila
+        int filaIdx = filaChar - 'A' + 1;
+        int colIdx = columna;
 
-        if (filaIdx < 0 || filaIdx > 5)
+        // Verificar disponibilidad del asiento 
+        // Se puede comprar si está Libre (L) o Reservado (R)
+        // Solo se rechaza si ya fue Vendido (V)
+        if (sala[filaIdx, colIdx] == 'V')
         {
-            Console.WriteLine("Fila inválida.");
+            Console.WriteLine($"El asiento {filaChar}{columna} ya fue vendido. Elija otro.");
+            Console.WriteLine("Presione una tecla para continuar...");
+            Console.ReadKey();
             return;
         }
 
-        if (sala[filaIdx, columna - 1] != 'R')
-        {
-            Console.WriteLine("El asiento no está reservado.");
-            return;
-        }
+        // Solicitar y validar la CATEGORÍA 
+        // Arreglo auxiliar con los nombres de las categorías (requerido por rúbrica)
+        string[] nombresCategorias = { "", "General", "Niño", "Tercera edad" };
 
-        Console.Write("Categoría (1=Normal, 2=Estudiante, 3=VIP): ");
+        Console.WriteLine("Categoría del cliente:");
+        Console.WriteLine("  1 = General");
+        Console.WriteLine("  2 = Niño");
+        Console.WriteLine("  3 = Tercera edad");
+        Console.Write("Seleccione: ");
         if (!int.TryParse(Console.ReadLine(), out int categoria) || categoria < 1 || categoria > 3)
         {
             Console.WriteLine("Categoría inválida.");
+            Console.WriteLine("Presione una tecla para continuar...");
+            Console.ReadKey();
             return;
         }
 
-        Console.Write("Día (1=Lunes...7=Domingo): ");
+        // Solicitar y validar el DÍA 
+        // Arreglo auxiliar con los nombres de los días
+        string[] nombresDias = { "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+
+        Console.WriteLine("Día de la función:");
+        Console.WriteLine("  1=Lunes  2=Martes  3=Miércoles  4=Jueves");
+        Console.WriteLine("  5=Viernes  6=Sábado  7=Domingo");
+        Console.Write("Seleccione: ");
         if (!int.TryParse(Console.ReadLine(), out int dia) || dia < 1 || dia > 7)
         {
             Console.WriteLine("Día inválido.");
+            Console.WriteLine("Presione una tecla para continuar...");
+            Console.ReadKey();
             return;
         }
 
+        // Calcular el precio final llamando a CalcularPrecio 
         double precio = CalcularPrecio(filaChar, categoria, dia);
-        sala[filaIdx, columna - 1] = 'V';
-        acumulador += precio;
-        contador++;
 
-        ImprimirTicket(filaChar, columna, categoria, dia, precio);
+        // Marcar el asiento como VENDIDO en la matriz 
+        sala[filaIdx, colIdx] = 'V';
+
+        //  Actualizar variables globales compartidas 
+        acumulador += precio;  // Sumar al total recaudado
+        contador++;            // Incrementar conteo de boletos
+
+        // Imprimir el ticket formateado 
+        ImprimirTicket(filaChar, columna, categoria, dia, precio, nombresCategorias, nombresDias);
+
+        Console.WriteLine("Presione una tecla para continuar...");
+        Console.ReadKey();
     }
 
+    //CalcularPrecio
+    // Calcula el precio final aplicando recargo VIP,
+    // descuento por categoría, descuento de miércoles e IVA.
     static double CalcularPrecio(char fila, int categoria, int dia)
     {
-        double precio = PRECIO_BASE;
+        double precio = PRECIO_BASE; // Partir del precio base
 
-        //segun tengo entendido no hace falta poner llaves se las pusiera pero capaz falla algo
+        // Aplicar recargo si el asiento es de fila C o D (zona central/VIP)
         if (fila == 'C' || fila == 'D')
             precio += RECARGO_VIP;
 
+        // Aplicar descuento según categoría con if-else if (como pide la rúbrica)
         if (categoria == 2)
-            precio -= precio * DESCUENTO_ESTUDIANTE;
+            precio -= precio * DESCUENTO_NINO;       // Niño: 50% de descuento
+        else if (categoria == 3)
+            precio -= precio * DESCUENTO_TERCERA;    // Tercera edad: 30% de descuento
+                                                     // General (categoria == 1): sin descuento
 
-        if (dia == 6 || dia == 7)
-            precio -= precio * 0.05;
+        // Aplicar descuento adicional si es miércoles (día 3)
+        if (dia == 3)
+            precio -= precio * DESCUENTO_MIERCOLES;  // 20% adicional
 
+        // Sumar IVA al precio resultante
         precio += precio * IVA;
-        return Math.Round(precio, 2);
+
+        return Math.Round(precio, 2); // Redondear a 2 decimales
     }
 
-    static void ImprimirTicket(char fila, int columna, int categoria, int dia, double precio)
+    //ImprimirTicket
+    // Muestra el comprobante de compra con desglose de precio.
+    static void ImprimirTicket(char fila, int columna, int categoria, int dia, double precioFinal, string[] categorias, string[] dias)
     {
-        string[] cats = { "", "Normal", "Estudiante", "VIP" };
-        string[] dias = { "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
+        // Calcular valores para el desglose
+        double precioSinIVA = Math.Round(precioFinal / (1 + IVA), 2);
+        double montoIVA = Math.Round(precioFinal - precioSinIVA, 2);
 
-        Console.WriteLine("\n=============================");
-        Console.WriteLine("        TICKET DE CINE       ");
-        Console.WriteLine("=============================");
-        Console.WriteLine($"  Asiento : Fila {fila}, Columna {columna}");
-        Console.WriteLine($"  Categoría: {cats[categoria]}");
-        Console.WriteLine($"  Día      : {dias[dia]}");
-        Console.WriteLine($"  Total    : ${precio:F2}");
-        Console.WriteLine("=============================\n");
+        Console.WriteLine("\n================================");
+        Console.WriteLine("         TICKET CINEUES         ");
+        Console.WriteLine("================================");
+        Console.WriteLine($"  Asiento   : Fila {fila}, Columna {columna}");
+        Console.WriteLine($"  Categoría : {categorias[categoria]}");
+        Console.WriteLine($"  Día       : {dias[dia]}");
+        Console.WriteLine("--------------------------------");
+        Console.WriteLine($"  Subtotal  : ${precioSinIVA:F2}");
+        Console.WriteLine($"  IVA (13%) : ${montoIVA:F2}");
+        Console.WriteLine($"  TOTAL     : ${precioFinal:F2}");
+        Console.WriteLine("================================\n");
     }
     static void MostrarEstadisticas(char[,] sala, int vendidos, double recaudacion)
     {
