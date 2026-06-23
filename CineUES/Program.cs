@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 class CineUES
@@ -20,8 +21,8 @@ class CineUES
         //Variables
         bool Menu = true; //variable para el bucle de menu
         int Quehacer;  //Variable que guardara la opcion a elegir por el usuario
-        double acumulador = 0.00;
-        int contador = 0;
+        double acumulador = 0.00; //variable que lleva las ganacias
+        int contador = 0; //Varieble que lleva los tickest que se han vendido
         do
         {
             Console.WriteLine("----------------------");
@@ -70,22 +71,22 @@ class CineUES
                         break;
 
                     case 5: // Aqui se mostraran las estadisiticas de la la funcion
-                     MostrarEstadisticas(sala, contador, acumulador);
-                     Console.WriteLine("Presione enter para continuar");
-                     Console.ReadKey();
+                        MostrarEstadisticas(sala, contador, acumulador);
+                        Console.WriteLine("Presione enter para continuar");
+                        Console.ReadKey();
                         break;
 
                     case 6: // Este es el mensaje de despedida y el resumen final
-                     Console.WriteLine("\n------ RESUMEN FINAL ------");
-                     Console.WriteLine($"Total de boletos vendidos: {contador}");
-                     Console.WriteLine($"Recaudación total        : ${acumulador:F2}");
-                     if (contador > 0)
-                     {
-                         Console.WriteLine($"Promedio por boleto      : ${acumulador / contador:F2}");
-                     }
-                     Console.WriteLine("\n¡Gracias por usar CineUES!");
-                     Console.WriteLine("-------------------------\n");
-                     Menu = false;
+                        Console.WriteLine("\n------ RESUMEN FINAL ------");
+                        Console.WriteLine($"Total de boletos vendidos: {contador}");
+                        Console.WriteLine($"Recaudación total        : ${acumulador:F2}");
+                        if (contador > 0)
+                        {
+                            Console.WriteLine($"Promedio por boleto      : ${acumulador / contador:F2}");
+                        }
+                        Console.WriteLine("\n¡Gracias por usar CineUES!");
+                        Console.WriteLine("-------------------------\n");
+                        Menu = false;
                         break;
 
                     default: //Esto por si ingresa un valor que no esta en el menu
@@ -109,9 +110,9 @@ class CineUES
 
     static void MostrarMapa(char[,] Sala) //Funcion que mostrara los asientos
     {
-        for (int fila = 0; fila < Sala.GetLength(0); fila++) //Creamos el primer bucle que ira mostrando las filas
+        for (int fila = 0; fila < Sala.GetLength(0); fila++) //Creamos el primer bucle que ira mostrando las filas en este bucle se va repitiendo hasta que pasa por todas las filas en este caso 7 ya que una es la fila que muestra los numeros de las columnas
         {
-            for (int columna = 0; columna < Sala.GetLength(1); columna++) //Este bucle ira imprimiendo los valores tomando la fila y la columna
+            for (int columna = 0; columna < Sala.GetLength(1); columna++) //Este bucle ira imprimiendo los valores tomando la fila y la columna Se entra va repitiendo el bucle por cada columna
             {
                 Console.Write(Sala[fila, columna] + " ");
             }
@@ -121,23 +122,23 @@ class CineUES
         }
     }
 
-    //la funcion para reservar el asiento
-    //recibe la matriz por referencia (ref) para poder modificarla directamente
+    //Funcion para reservar los asientos
+    //Se usa ref para actualizar la matriz original
     static void reservarAsiento(ref char[,] sala)
     {
         Console.WriteLine("Reservar Asiento");
 
-        // bandera que servirá para controlar si los datos ingresados son válidos
-        // si paso algun error lo va a cambiar a false
+        // bandera para ver si los datos son correctos
+        //si pasa un error se pone en false
         bool datosValidos = true;
 
-        //solicita la fila
+        //Se pide la fila
         Console.Write("Ingrese la fila por favor (A-F)");
-        //lee un caracter para convertirlo en mayuscula, no importa si escribe a o A
-        char filaIngresada = char.ToUpper(Console.ReadKey().KeyChar); //Readkey espera que el usuario presione una tecla y keychar toma el resultado
+        //con ToUpper se convierte la letra en mayuscula
+        char filaIngresada = char.ToUpper(Console.ReadKey().KeyChar); //Readkey espera que el usuario presione una tecla y keychar toma el resultado no espera a que el usuario de enter
         Console.WriteLine();
 
-        //validariamos la fila pero solo se puede con letras de la A a la F
+        //Se verifica si la letra ingresada esta desde la A a la F
         if (filaIngresada < 'A' || filaIngresada > 'F')
         {
             Console.WriteLine("Esa fila no es valida");
@@ -148,11 +149,13 @@ class CineUES
 
         int columnaIngresada = 0;//en esta variable guardo la columna que selecciono
 
-        //aqui se solicita la columna solamente si la fila fue válida        
+
+        if (datosValidos) //Asi se evita pedir columna si ya se equivoco de fila
         {
+            //Aqui se pide que ingrese la columna
             Console.Write("Ingrese la columna porfavor (1-8)");
 
-            //esta para convertir lo de entrada a entero
+            //Con tryparse se verifica que lo que se ingrese es un entero
             if (!int.TryParse(Console.ReadLine(), out columnaIngresada))
             {
                 Console.WriteLine("La columna debe ser un numero");
@@ -169,32 +172,37 @@ class CineUES
                 //si esta fuera del rango es invalido
                 datosValidos = false;
             }
-            // si algun dato no era correcto se termina y regresa al menu principal
-            if (!datosValidos)
-            {
-                return;
-            }
 
-            //se le sumara 1 porque la fila 0 es la que tiene los encabezados
-            int fila = filaIngresada - 'A' + 1;
-
-            // la columna coincide directamente con los índices de la matriz,
-            // porque la columna 0 contiene las letras de las filas.
-            int columna = columnaIngresada;
-
-            //verificar si el asiento esta libre osea los que esten en L
-            if (sala[fila, columna] != 'L')
-            {
-                Console.WriteLine("Este asiento ya esta ocupado");
-
-                //terminaria el metodo sin modificar la matriz
-                return;
-            }
-
-            //pero si el asiento esta libre va a cambiar el estado
-            sala[fila, columna] = 'R';
-            Console.WriteLine($"Asiento {filaIngresada} {columnaIngresada} fueron reservados correctamente");
         }
+        // si algun dato no era correcto se termina y regresa al menu principal
+        if (!datosValidos)
+        {
+            return;
+        }
+
+        //en C# y en varios lenguajes basados en C los char son codigo ASCCI
+        //Entonces la A en ascci es 65
+        //Enonces fila ingresada toma el valor de la letra en ascii por ejemplo la b es 66
+        //Por lo que 66 -65 = 1 pero como la b esta en la fila 2 contando desde 0 en la matriz
+        //se le suma 1 para compensar
+        int fila = filaIngresada - 'A' + 1;
+
+        //no hay problema en poner coumna 1 porque en este caso si empiezan desde ahi por lo que se usa la misma directamente
+        int columna = columnaIngresada;
+
+        //verificar si el asiento esta libre osea los que esten en L
+        if (sala[fila, columna] != 'L')  //Se revisa en la matriz ingresando los datos de la fila y columna
+        {
+            Console.WriteLine("Este asiento ya esta ocupado");
+
+            //Si esta ocupado se sale de la funcion y no se continua
+            return;
+        }
+
+        //pero si el asiento esta libre va a cambiar el estado
+        sala[fila, columna] = 'R';
+        Console.WriteLine($"Asiento {filaIngresada} {columnaIngresada} fueron reservados correctamente");
+
     }
 
     //esta es la funcio para quitar la reserva del asiento
@@ -213,7 +221,8 @@ class CineUES
         Console.WriteLine();
 
         //ahora toca verificar que la fila este entre A y F
-        if (filaIngresada < 'A' || filaIngresada > 'F' )
+        //Por lo mismo de que estan en codigo asccii
+        if (filaIngresada < 'A' || filaIngresada > 'F')
         {
             Console.WriteLine("Esa fila no es valida");
             datosValidos = false;
@@ -248,13 +257,19 @@ class CineUES
             return;
         }
 
-        //conversion de la letra a indice de la fila
+        //en C# y en varios lenguajes basados en C los char son codigo ASCCI
+        //Entonces la A en ascci es 65
+        //Enonces fila ingresada toma el valor de la letra en ascii por ejemplo la b es 66
+        //Por lo que 66 -65 = 1 pero como la b esta en la fila 2 contando desde 0 en la matriz
+        //se le suma 1 para compensar
         int fila = filaIngresada - 'A' + 1;
 
-        //la columna coincide con el indice de la matriz
+        //La columna es la misma que se va  a usar asi que no hay problemas
         int columna = columnaIngresada;
 
         //verificar que el asiento este reservado
+        //Solo tomamos el valor de la fila y la columna que obtuvimos y se inserta en la matriz para encontrarla
+        //Luego se verifica que no este reservado para comprarlo
         if (sala[fila, columna] != 'R')
         {
             Console.WriteLine("Este asiento no esta reservado");
@@ -262,10 +277,11 @@ class CineUES
         }
 
         //cancelar la reserva "R" y volver a ponerla libre "L"
-        sala[fila,columna] = 'L';
-        Console.WriteLine($"La reserva del asiento {filaIngresada} {columnaIngresada} fueron cancelados"); 
+        sala[fila, columna] = 'L';
+        Console.WriteLine($"La reserva del asiento {filaIngresada} {columnaIngresada} fueron cancelados");
     }
-    //constantes
+
+    //constantes Para compra e imprimir ticket
     const double PRECIO_BASE = 5.00;
     const double IVA = 0.13;
     const double RECARGO_VIP = 2.50;
@@ -324,6 +340,7 @@ class CineUES
     {
         double precio = PRECIO_BASE;
 
+        //segun tengo entendido no hace falta poner llaves se las pusiera pero capaz falla algo
         if (fila == 'C' || fila == 'D')
             precio += RECARGO_VIP;
 
@@ -351,42 +368,54 @@ class CineUES
         Console.WriteLine($"  Total    : ${precio:F2}");
         Console.WriteLine("=============================\n");
     }
-     static void MostrarEstadisticas(char[,] sala, int vendidos, double recaudacion)
-{
-    Console.WriteLine("\n----- ESTADISTICAS DE LA SALA -----");
-
-    // manejo de la division por 0 
-    if (vendidos == 0)
+    static void MostrarEstadisticas(char[,] sala, int vendidos, double recaudacion)
     {
-        Console.WriteLine("No se ha vendido ningun boleto");
-        Console.WriteLine("Promedio por boleto: $0.00");
-    }
-    else
-    {
-        double promedio = recaudacion / vendidos;
-        Console.WriteLine($"Boletos vendidos   : {vendidos}");
-        Console.WriteLine($"Recaudación total  : ${recaudacion:F2}");
-        Console.WriteLine($"Promedio por boleto: ${promedio:F2}");
-    }
+        Console.WriteLine("\n----- ESTADISTICAS DE LA SALA -----");
 
-    // contador de asientos
-    int libres = 0, reservados = 0, comprados = 0;
-
-    for (int i = 1; i < sala.GetLength(0); i++)
-    {
-        for (int j = 1; j < sala.GetLength(1); j++)
+        // manejo de la division por 0 
+        if (vendidos == 0)  //mensaje por si no se han vendido boletos
         {
-            if (sala[i, j] == 'L') libres++;
-            else if (sala[i, j] == 'R') reservados++;
-            else if (sala[i, j] == 'V') comprados++;
+            Console.WriteLine("No se ha vendido ningun boleto");
+            Console.WriteLine("Promedio por boleto: $0.00");
         }
-    }
+        else
+        {
+            double promedio = recaudacion / vendidos; //para sacar promedio de ganacia de los boletos vendidos se divide la recaudacion entre los boletas
+            Console.WriteLine($"Boletos vendidos   : {vendidos}");
+            Console.WriteLine($"Recaudación total  : ${recaudacion:F2}");
+            Console.WriteLine($"Promedio por boleto: ${promedio:F2}");
+        }
 
-    Console.WriteLine($"Asientos libres    : {libres}");
-    Console.WriteLine($"Asientos reservados: {reservados}");
-    Console.WriteLine($"Asientos comprados : {comprados}");
-    Console.WriteLine($"Total de asientos  : {libres + reservados + comprados}");
-    Console.WriteLine("------------------------\n");
-}
+        // contador de asientos
+        int libres = 0, reservados = 0, comprados = 0;
+
+
+        //Bucle que va pasando toda la matriz para verificar si el asiento esta vendido, comprado o vacio
+        for (int i = 1; i < sala.GetLength(0); i++) //Se repite por cada fila
+        {
+            for (int j = 1; j < sala.GetLength(1); j++) //Se repite por cada columna
+            {
+                if (sala[i, j] == 'L') //se hace la suma segun la letra que contien el indice
+                {
+                    libres++;
+                }
+                else if (sala[i, j] == 'R')
+                {
+                    reservados++;
+                }
+                else if (sala[i, j] == 'V')
+                {
+                    comprados++;
+                }
+            }
+        }
+
+        //Se imprime resumen del dia
+        Console.WriteLine($"Asientos libres    : {libres}");
+        Console.WriteLine($"Asientos reservados: {reservados}");
+        Console.WriteLine($"Asientos comprados : {comprados}");
+        Console.WriteLine($"Total de asientos  : {libres + reservados + comprados}");
+        Console.WriteLine("------------------------\n");
+    }
 }
 
