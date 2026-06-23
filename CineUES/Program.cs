@@ -180,11 +180,7 @@ class CineUES
             return;
         }
 
-        //en C# y en varios lenguajes basados en C los char son codigo ASCCI
-        //Entonces la A en ascci es 65
-        //Enonces fila ingresada toma el valor de la letra en ascii por ejemplo la b es 66
-        //Por lo que 66 -65 = 1 pero como la b esta en la fila 2 contando desde 0 en la matriz
-        //se le suma 1 para compensar
+        
         int fila = filaIngresada - 'A' + 1;
 
         //no hay problema en poner coumna 1 porque en este caso si empiezan desde ahi por lo que se usa la misma directamente
@@ -257,11 +253,7 @@ class CineUES
             return;
         }
 
-        //en C# y en varios lenguajes basados en C los char son codigo ASCCI
-        //Entonces la A en ascci es 65
-        //Enonces fila ingresada toma el valor de la letra en ascii por ejemplo la b es 66
-        //Por lo que 66 -65 = 1 pero como la b esta en la fila 2 contando desde 0 en la matriz
-        //se le suma 1 para compensar
+        
         int fila = filaIngresada - 'A' + 1;
 
         //La columna es la misma que se va  a usar asi que no hay problemas
