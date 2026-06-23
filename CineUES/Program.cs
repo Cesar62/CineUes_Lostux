@@ -70,10 +70,22 @@ class CineUES
                         break;
 
                     case 5: // Aqui se mostraran las estadisiticas de la la funcion
+                     MostrarEstadisticas(sala, contador, acumulador);
+                     Console.WriteLine("Presione enter para continuar");
+                     Console.ReadKey();
                         break;
 
-                    case 6:
-                        Menu = false;
+                    case 6: // Este es el mensaje de despedida y el resumen final
+                     Console.WriteLine("\n------ RESUMEN FINAL ------");
+                     Console.WriteLine($"Total de boletos vendidos: {contador}");
+                     Console.WriteLine($"Recaudación total        : ${acumulador:F2}");
+                     if (contador > 0)
+                     {
+                         Console.WriteLine($"Promedio por boleto      : ${acumulador / contador:F2}");
+                     }
+                     Console.WriteLine("\n¡Gracias por usar CineUES!");
+                     Console.WriteLine("-------------------------\n");
+                     Menu = false;
                         break;
 
                     default: //Esto por si ingresa un valor que no esta en el menu
@@ -339,6 +351,42 @@ class CineUES
         Console.WriteLine($"  Total    : ${precio:F2}");
         Console.WriteLine("=============================\n");
     }
+     static void MostrarEstadisticas(char[,] sala, int vendidos, double recaudacion)
+{
+    Console.WriteLine("\n----- ESTADISTICAS DE LA SALA -----");
 
+    // manejo de la division por 0 
+    if (vendidos == 0)
+    {
+        Console.WriteLine("No se ha vendido ningun boleto");
+        Console.WriteLine("Promedio por boleto: $0.00");
+    }
+    else
+    {
+        double promedio = recaudacion / vendidos;
+        Console.WriteLine($"Boletos vendidos   : {vendidos}");
+        Console.WriteLine($"Recaudación total  : ${recaudacion:F2}");
+        Console.WriteLine($"Promedio por boleto: ${promedio:F2}");
+    }
+
+    // contador de asientos
+    int libres = 0, reservados = 0, comprados = 0;
+
+    for (int i = 1; i < sala.GetLength(0); i++)
+    {
+        for (int j = 1; j < sala.GetLength(1); j++)
+        {
+            if (sala[i, j] == 'L') libres++;
+            else if (sala[i, j] == 'R') reservados++;
+            else if (sala[i, j] == 'V') comprados++;
+        }
+    }
+
+    Console.WriteLine($"Asientos libres    : {libres}");
+    Console.WriteLine($"Asientos reservados: {reservados}");
+    Console.WriteLine($"Asientos comprados : {comprados}");
+    Console.WriteLine($"Total de asientos  : {libres + reservados + comprados}");
+    Console.WriteLine("------------------------\n");
+}
 }
 
