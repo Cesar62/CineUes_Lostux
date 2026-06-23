@@ -31,7 +31,7 @@ class CineUES
             Console.WriteLine("¿Que desea hacer?");
             Console.WriteLine("1.Mostrar Sala de la sala.");
             Console.WriteLine("2. Reservar asiento");
-            Console.WriteLine("3. Comprara e imprimir ticket");
+            Console.WriteLine("3. Comprar e imprimir ticket");
             Console.WriteLine("4. Cancelar reserva");
             Console.WriteLine("5. Mostrar estadisticas de la función");
             Console.WriteLine("6. Salir");
@@ -346,9 +346,9 @@ class CineUES
         string[] nombresCategorias = { "", "General", "Niño", "Tercera edad" };
 
         Console.WriteLine("Categoría del cliente:");
-        Console.WriteLine("  1 = General");
-        Console.WriteLine("  2 = Niño");
-        Console.WriteLine("  3 = Tercera edad");
+        Console.WriteLine("  1 = General. Precio completo");
+        Console.WriteLine("  2 = Niño. 50% de descuento");
+        Console.WriteLine("  3 = Tercera edad. 30% de descuento");
         Console.Write("Seleccione: ");
         if (!int.TryParse(Console.ReadLine(), out int categoria) || categoria < 1 || categoria > 3)
         {
@@ -363,7 +363,7 @@ class CineUES
         string[] nombresDias = { "", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
 
         Console.WriteLine("Día de la función:");
-        Console.WriteLine("  1=Lunes  2=Martes  3=Miércoles  4=Jueves");
+        Console.WriteLine("  1=Lunes  2=Martes  3=Miércoles. 20% descuento  4=Jueves");
         Console.WriteLine("  5=Viernes  6=Sábado  7=Domingo");
         Console.Write("Seleccione: ");
         if (!int.TryParse(Console.ReadLine(), out int dia) || dia < 1 || dia > 7)
@@ -427,17 +427,25 @@ class CineUES
         double precioSinIVA = Math.Round(precioFinal / (1 + IVA), 2);
         double montoIVA = Math.Round(precioFinal - precioSinIVA, 2);
 
-        Console.WriteLine("\n================================");
+        Console.WriteLine("================================");
         Console.WriteLine("         TICKET CINEUES         ");
         Console.WriteLine("================================");
         Console.WriteLine($"  Asiento   : Fila {fila}, Columna {columna}");
-        Console.WriteLine($"  Categoría : {categorias[categoria]}");
-        Console.WriteLine($"  Día       : {dias[dia]}");
+        Console.Write($"  Categoría : {categorias[categoria]}");
+        if(categoria == 2) //Agregando mensaje del descuento que tiene
+        {
+            Console.WriteLine(" Descuento del 50%");
+        }else if(categoria == 3)
+        {
+            Console.WriteLine(" Descuento del 30%");
+        }
+        Console.Write($"  Día       : {dias[dia]}");
+        if(dia == 3){ Console.WriteLine(" !!!Descuento del 20%!!!");} //mensaje si hay descuento por dia
         Console.WriteLine("--------------------------------");
         Console.WriteLine($"  Subtotal  : ${precioSinIVA:F2}");
         Console.WriteLine($"  IVA (13%) : ${montoIVA:F2}");
         Console.WriteLine($"  TOTAL     : ${precioFinal:F2}");
-        Console.WriteLine("================================\n");
+        Console.WriteLine("================================");
     }
     static void MostrarEstadisticas(char[,] sala, int vendidos, double recaudacion)
     {
