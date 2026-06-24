@@ -439,6 +439,10 @@ class CineUES
         {
             Console.WriteLine(" Descuento del 30%");
         }
+        else
+        {
+            Console.WriteLine("");
+        }
         Console.Write($"  Día       : {dias[dia]}");
         if(dia == 3){ Console.WriteLine(" !!!Descuento del 20%!!!");} //mensaje si hay descuento por dia
         Console.WriteLine("--------------------------------");
